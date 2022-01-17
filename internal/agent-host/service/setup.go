@@ -22,6 +22,7 @@ func NewSetupService() *SetupService {
 
 	srv.GenWebsockifyTokens()
 	srv.LaunchWebsockifyService()
+	srv.LaunchNoVNCService()
 
 	return &srv
 }
@@ -72,4 +73,17 @@ func (s *SetupService) GenWebsockifyTokens() {
 
 		port++
 	}
+}
+
+func (s *SetupService) LaunchNoVNCService() {
+	noVNCPath := filepath.Join(agentConf.Inst.DirKvm, "noVNC")
+	logPath := filepath.Join(agentConf.Inst.DirKvm, "noVNC/nohup.log")
+
+	cmd := fmt.Sprintf("nohup light-server -s  %s > %s 2>&1 &",
+		noVNCPath, logPath)
+
+	_shellUtils.KillProcess("light-server")
+	_shellUtils.ExeShell(cmd)
+
+	return
 }
