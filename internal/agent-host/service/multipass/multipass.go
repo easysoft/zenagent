@@ -30,13 +30,12 @@ const (
 	cmdMpStopAll = "multipass stop --all"
 )
 
-var cmdMpLaunch = "multipass launch "
-
 type MultiPassService struct {
 	syncMap sync.Map
 }
 
 func (s *MultiPassService) CreateVm(req *v1.MultiPassReq, removeSameName bool) (dom domain.MultiPass, err error) {
+	cmdMpLaunch := "multipass launch "
 	name := req.VmUniqueName
 	cpus := req.Cpus
 	disk := req.Disk
@@ -71,7 +70,8 @@ func (s *MultiPassService) CreateVm(req *v1.MultiPassReq, removeSameName bool) (
 		}
 	}
 	_, err = _shellUtils.ExeShellWithOutput(cmdMpLaunch)
-	if s.GetVmInfo(name).State != "Running" && err != nil {
+	dom = s.GetVmInfo(name)
+	if dom.State != "Running" && err != nil {
 		_logUtils.Errorf(err.Error())
 		return
 	}
