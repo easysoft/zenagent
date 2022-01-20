@@ -38,7 +38,7 @@ func (s *MultiPassService) CreateVm(req *v1.MultiPassReq, removeSameName bool) (
 	cmdMpLaunch := "multipass launch "
 	name := req.VmUniqueName
 	cpus := req.Cpus
-	disk := req.Disk
+	disk := req.Disk / 1000
 	mem := req.VmMemory
 	filePath := req.ImagePath
 	imgFrom := req.ImgFrom
