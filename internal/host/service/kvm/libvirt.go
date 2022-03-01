@@ -43,7 +43,7 @@ func NewLibvirtService() *LibvirtService {
 	return s
 }
 
-func (s *LibvirtService) ListTmpl() (ret []libvirt.Domain, err error) {
+func (s *LibvirtService) ListTmpl() (ret []libvirtxml.Domain, err error) {
 	if s.LibvirtConn == nil {
 		return
 	}
@@ -57,7 +57,16 @@ func (s *LibvirtService) ListTmpl() (ret []libvirt.Domain, err error) {
 	for _, domain := range domains {
 		name, _ := domain.GetName()
 		if strings.Index(name, "tmpl-") > -1 {
-			ret = append(ret, domain)
+			newXml := ""
+			newXml, err = domain.GetXMLDesc(0)
+			if err != nil {
+				continue
+			}
+
+			domainCfg := &libvirtxml.Domain{}
+			err = domainCfg.Unmarshal(newXml)
+
+			ret = append(ret, *domainCfg)
 		}
 	}
 
