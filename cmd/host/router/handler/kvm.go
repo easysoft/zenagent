@@ -26,12 +26,6 @@ func NewKvmCtrl() *KvmCtrl {
 // @Success 200 {object} _httpUtils.Response{data=v1.KvmResp} "code = success? 1 : 0"
 // @Router /api/v1/kvm/create [post]
 func (c *KvmCtrl) ListTempl(ctx iris.Context) {
-	req := v1.KvmReq{}
-	if err := ctx.ReadJSON(&req); err != nil {
-		_, _ = ctx.JSON(_httpUtils.ApiRes(iris.StatusInternalServerError, err.Error(), nil))
-		return
-	}
-
 	domains, err := c.LibvirtService.ListTempl()
 
 	if err != nil {

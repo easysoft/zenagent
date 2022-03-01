@@ -24,7 +24,7 @@ sudo systemctl enable zv.service
 sudo systemctl disable zv.service
 
 
-# 本地执行并上传 https://github.com/swaggo/swag
+# 本地安装swaggo，执行并上传。 https://github.com/swaggo/swag
 rm -rf res/server/docs
 swag init --parseDependency --parseInternal --parseDepth 5 -d cmd/server -o res/server/docs
 rm -rf res/host/docs
@@ -34,7 +34,7 @@ swag init --parseDependency --parseInternal --parseDepth 5 -d cmd/vm -o res/vm/d
 
 nohup swagger serve -p 50001 --no-open /Users/aaron/rd/project/zentao/go/zv/res/server/docs/swagger.json > server.log 2>&1 &
 
-# 服务器上执行 https://github.com/go-swagger/go-swagger
+# 服务器上启动go-swagger服务。 https://github.com/go-swagger/go-swagger
 ps -ef | grep swagger | grep -v grep | awk '{print $2}' | xargs kill -9
 nohup swagger serve --no-open -p 50001 res/server/docs/swagger.json > server.log 2>&1 &
 nohup swagger serve --no-open -p 50002 res/host/docs/swagger.json > host.log 2>&1 &
