@@ -28,13 +28,17 @@ func NewQemuService() *QemuService {
 func (s *QemuService) GenVmDef(tmplXml, macAddress, vmName, backingPath string, vmCpu, vmMemory uint) (
 	vmXml string, rawPath string, err error) {
 
-	rawPath = filepath.Join(agentConf.Inst.DirImage, vmName+".qcow2")
-
 	domCfg := &libvirtxml.Domain{}
 	err = domCfg.Unmarshal(tmplXml)
 	if err != nil {
 		return
 	}
+
+	return s.GenVmDefFromCfg(domCfg, macAddress, vmName, backingPath, vmCpu, vmMemory)
+}
+
+func (s *QemuService) GenVmDefFromCfg(domCfg *libvirtxml.Domain, macAddress, vmName, backingPath string, vmCpu, vmMemory uint) (
+	vmXml string, rawPath string, err error) {
 
 	mainDiskIndex := s.GetMainDiskIndex(domCfg)
 

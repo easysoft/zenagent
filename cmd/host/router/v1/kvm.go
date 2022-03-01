@@ -6,8 +6,8 @@ import (
 
 type KvmReq struct {
 	VmMacAddress   string `json:"vmMacAddress"`
-	VmBackingPath  string `json:"vmBacking"`
 	VmTemplateName string `json:"vmTemplate"`
+	VmBackingPath  string `json:"vmBacking"`
 
 	VmUniqueName  string `json:"vmUniqueName"`
 	VmCpu         uint   `json:"vmCpu"`
@@ -25,8 +25,8 @@ type KvmReq struct {
 }
 
 type KvmReqClone struct {
-	VmSrcName    string `json:"vmSrcName"`
 	VmMacAddress string `json:"vmMacAddress"`
+	VmSrcName    string `json:"vmSrcName"`
 
 	VmUniqueName string `json:"vmUniqueName"`
 	VmCpu        uint   `json:"vmCpu"`

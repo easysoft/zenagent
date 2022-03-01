@@ -117,6 +117,7 @@ func (s *LibvirtService) CreateVm(req *v1.KvmReq, removeSameName bool) (dom *lib
 		s.DestroyVmByName(vmUniqueName, true)
 	}
 
+	// gen xml definition
 	tmplXml := s.GetVmDef(vmTemplateName)
 	vmXml := ""
 	vmXml, vmRawPath, _ = s.QemuService.GenVmDef(tmplXml, vmMacAddress, vmUniqueName, vmBackingPath, vmCpu, vmMemorySize)
@@ -158,18 +159,40 @@ func (s *LibvirtService) CloneVm(req *v1.KvmReqClone, removeSameName bool) (dom 
 	reqMsg, err := json.Marshal(req)
 	_logUtils.Infof("%s", reqMsg)
 
+	// get src vm config
+	tmplXml := s.GetVmDef(req.VmSrcName)
+	domCfg := &libvirtxml.Domain{}
+	err = domCfg.Unmarshal(tmplXml)
+	if err != nil {
+		return
+	}
+
 	vmMacAddress := req.VmMacAddress
 	vmUniqueName := req.VmUniqueName
+	if removeSameName {
+		s.DestroyVmByName(vmUniqueName, true)
+	}
 
 	vmCpu := req.VmCpu
 	vmMemorySize := req.VmMemorySize
 	vmDiskSize := req.VmDiskSize
 
-	if removeSameName {
-		s.DestroyVmByName(vmUniqueName, true)
+	// update empty values from tmpl
+	if vmCpu == 0 {
+		vmCpu = domCfg.VCPU.Value
+	}
+	if vmMemorySize == 0 {
+		vmCpu = domCfg.Memory.Value
+	}
+	if vmBackingPath == "" {
+		mainDiskIndex := s.QemuService.GetMainDiskIndex(domCfg)
+		backingStore := domCfg.Devices.Disks[mainDiskIndex].BackingStore
+		if backingStore != nil && backingStore.Source.File != nil {
+			vmBackingPath = backingStore.Source.File.File
+		}
 	}
 
-	tmplXml := s.GetVmDef("vmTemplateName") // TODO:
+	// gen xml definition
 	vmXml := ""
 	vmXml, vmRawPath, _ = s.QemuService.GenVmDef(tmplXml, vmMacAddress, vmUniqueName, vmBackingPath, vmCpu, vmMemorySize)
 	if err != nil {
