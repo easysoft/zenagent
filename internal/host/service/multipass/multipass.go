@@ -3,7 +3,7 @@ package multiPassService
 import (
 	"errors"
 	"fmt"
-	v1 "github.com/easysoft/zv/cmd/agent-host/router/v1"
+	v1 "github.com/easysoft/zv/cmd/host/router/v1"
 	agentConf "github.com/easysoft/zv/internal/agent/conf"
 	"github.com/easysoft/zv/internal/comm/domain"
 	_fileUtils "github.com/easysoft/zv/internal/pkg/lib/file"

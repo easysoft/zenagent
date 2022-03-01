@@ -21,7 +21,7 @@ compile_all: compile_linux
 
 compile_linux:
 	@echo 'start compile linux'
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o ${BIN_LINUX}zv-host cmd/agent-host/main.go
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o ${BIN_LINUX}zv-host cmd/host/main.go
 
 copy_files:
 	@echo 'start copy files'

@@ -1,8 +1,8 @@
 package hostHandler
 
 import (
-	v1 "github.com/easysoft/zv/cmd/agent-host/router/v1"
-	multiPassService "github.com/easysoft/zv/internal/agent-host/service/multipass"
+	v1 "github.com/easysoft/zv/cmd/host/router/v1"
+	multiPassService "github.com/easysoft/zv/internal/host/service/multipass"
 	_const "github.com/easysoft/zv/internal/pkg/const"
 	_httpUtils "github.com/easysoft/zv/internal/pkg/lib/http"
 	"github.com/kataras/iris/v12"

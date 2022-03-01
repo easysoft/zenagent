@@ -17,5 +17,5 @@ cd /home/aaron/dev/project/zv
 git fetch --all && git reset --hard origin/main && git pull
 go get all
 
-# nohup go run cmd/agent-vm/main.go -t vm > zv.log 2>&1
-go run cmd/agent-vm/main.go -t vm
+# nohup go run cmd/vm/main.go -t vm > zv.log 2>&1
+go run cmd/vm/main.go -t vm

@@ -27,7 +27,7 @@ compile_all: compile_win64 compile_win32 compile_linux compile_mac
 
 compile_win64:
 	@echo 'start compile win64'
-	@CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o ${BIN_WIN64}zv-vm.exe cmd/agent-vm/main.go
+	@CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o ${BIN_WIN64}zv-vm.exe cmd/vm/main.go
 
 compile_win32:
 	@echo 'start compile win32'
