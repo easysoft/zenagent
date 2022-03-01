@@ -1,8 +1,8 @@
 package hostHandler
 
 import (
-	v1 "github.com/easysoft/zv/cmd/agent-host/router/v1"
-	hostKvmService "github.com/easysoft/zv/internal/agent-host/service/kvm"
+	v1 "github.com/easysoft/zv/cmd/host/router/v1"
+	hostKvmService "github.com/easysoft/zv/internal/host/service/kvm"
 	_const "github.com/easysoft/zv/internal/pkg/const"
 	_httpUtils "github.com/easysoft/zv/internal/pkg/lib/http"
 	"github.com/kataras/iris/v12"
@@ -18,11 +18,37 @@ func NewKvmCtrl() *KvmCtrl {
 	return &KvmCtrl{}
 }
 
+// ListTempl
+// @summary 获取KVM虚拟机模板
+// @Accept json
+// @Produce json
+// @Param task body v1.KvmReq true "Kvm Request Object"
+// @Success 200 {object} _httpUtils.Response{data=v1.KvmResp} "code = success? 1 : 0"
+// @Router /api/v1/kvm/create [post]
+func (c *KvmCtrl) ListTempl(ctx iris.Context) {
+	req := v1.KvmReq{}
+	if err := ctx.ReadJSON(&req); err != nil {
+		_, _ = ctx.JSON(_httpUtils.ApiRes(iris.StatusInternalServerError, err.Error(), nil))
+		return
+	}
+
+	domains, err := c.LibvirtService.ListTempl()
+
+	if err != nil {
+		ctx.JSON(_httpUtils.ApiRes(iris.StatusInternalServerError, "fail to create vm", err))
+		return
+	}
+
+	ctx.JSON(_httpUtils.ApiRes(iris.StatusOK, "success to create vm", domains))
+
+	return
+}
+
 // Create
 // @summary 创建KVM虚拟机
 // @Accept json
 // @Produce json
-// @Param task body v1.KvmReq true "Kvm Request Object"
+// @Param kvmReq body v1.KvmReq true "Kvm Request Object"
 // @Success 200 {object} _httpUtils.Response{data=v1.KvmResp} "code = success? 1 : 0"
 // @Router /api/v1/kvm/create [post]
 func (c *KvmCtrl) Create(ctx iris.Context) {
@@ -33,6 +59,41 @@ func (c *KvmCtrl) Create(ctx iris.Context) {
 	}
 
 	dom, vmVncPort, vmRawPath, vmBackingPath, err := c.LibvirtService.CreateVm(&req, true)
+
+	if err != nil {
+		ctx.JSON(_httpUtils.ApiRes(iris.StatusInternalServerError, "fail to create vm", err))
+		return
+	}
+
+	vmName, _ := dom.GetName()
+	vm := v1.KvmResp{
+		Name:        vmName,
+		MacAddress:  req.VmMacAddress,
+		VncPort:     strconv.Itoa(vmVncPort),
+		ImagePath:   vmRawPath,
+		BackingPath: vmBackingPath,
+	}
+
+	ctx.JSON(_httpUtils.ApiRes(iris.StatusOK, "success to create vm", vm))
+
+	return
+}
+
+// Clone
+// @summary 克隆KVM虚拟机
+// @Accept json
+// @Produce json
+// @Param kvmReqClone body v1.KvmReqClone true "Kvm Request Object"
+// @Success 200 {object} _httpUtils.Response{data=v1.KvmResp} "code = success? 1 : 0"
+// @Router /api/v1/kvm/create [post]
+func (c *KvmCtrl) Clone(ctx iris.Context) {
+	req := v1.KvmReqClone{}
+	if err := ctx.ReadJSON(&req); err != nil {
+		_, _ = ctx.JSON(_httpUtils.ApiRes(iris.StatusInternalServerError, err.Error(), nil))
+		return
+	}
+
+	dom, vmVncPort, vmRawPath, vmBackingPath, err := c.LibvirtService.CloneVm(&req, true)
 
 	if err != nil {
 		ctx.JSON(_httpUtils.ApiRes(iris.StatusInternalServerError, "fail to create vm", err))

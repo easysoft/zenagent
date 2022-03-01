@@ -1,7 +1,7 @@
 package hostHandler
 
 import (
-	hostAgentService "github.com/easysoft/zv/internal/agent-host/service"
+	hostAgentService "github.com/easysoft/zv/internal/host/service"
 	_httpUtils "github.com/easysoft/zv/internal/pkg/lib/http"
 	"github.com/kataras/iris/v12"
 )

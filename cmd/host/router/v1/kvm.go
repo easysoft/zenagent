@@ -22,10 +22,25 @@ type KvmReq struct {
 	StartAfterCreated bool `json:"startAfterCreated"`
 }
 
+type KvmReqClone struct {
+	VmSrcName    string `json:"vmSrcName"`
+	VmMacAddress string `json:"vmMacAddress"`
+
+	VmUniqueName string `json:"vmUniqueName"`
+	VmCpu        uint   `json:"vmCpu"`
+	VmMemorySize uint   `json:"vmMemorySize"`
+	VmDiskSize   uint   `json:"vmDiskSize"`
+
+	StartAfterCreated bool `json:"startAfterCreated"`
+}
+
 type KvmResp struct {
 	Name        string `json:"name"`
 	MacAddress  string `json:"macAddress"`
 	VncPort     string `json:"vncPort"`
 	ImagePath   string `json:"imagePath"`
 	BackingPath string `json:"backingPath"`
+}
+type KvmRespTempl struct {
+	Name string `json:"name"`
 }

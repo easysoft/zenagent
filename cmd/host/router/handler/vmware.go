@@ -1,8 +1,8 @@
 package hostHandler
 
 import (
-	v1 "github.com/easysoft/zv/cmd/agent-host/router/v1"
-	vmWareService "github.com/easysoft/zv/internal/agent-host/service/vmware"
+	v1 "github.com/easysoft/zv/cmd/host/router/v1"
+	vmWareService "github.com/easysoft/zv/internal/host/service/vmware"
 	_httpUtils "github.com/easysoft/zv/internal/pkg/lib/http"
 	"github.com/kataras/iris/v12"
 )

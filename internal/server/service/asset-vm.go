@@ -7,7 +7,7 @@ import (
 	_domain "github.com/easysoft/zv/internal/pkg/domain"
 	"github.com/easysoft/zv/internal/server/model"
 	"github.com/easysoft/zv/internal/server/repo"
-	commonService "github.com/easysoft/zv/internal/server/service/common"
+	"github.com/easysoft/zv/internal/server/service/common"
 )
 
 type VmService interface {
@@ -68,8 +68,8 @@ func (s VmCommonService) genVmName(backing model.VmBacking, vmId uint) (name str
 	return
 }
 
-func (s VmCommonService) genValidMacAddress() (mac string) {
-	for i := 0; i < 10; i++ {
+func (s VmCommonService) genValidMacAddressWithDb() (mac string) {
+	for i := 0; i < 60; i++ {
 		mac := s.genRandomMac()
 		vm := s.VmRepo.GetByMac(mac)
 		if vm.ID == 0 {

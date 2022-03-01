@@ -2,7 +2,7 @@ package hostAgentService
 
 import (
 	"fmt"
-	v1 "github.com/easysoft/zv/cmd/agent-host/router/v1"
+	v1 "github.com/easysoft/zv/cmd/host/router/v1"
 	agentConf "github.com/easysoft/zv/internal/agent/conf"
 	_fileUtils "github.com/easysoft/zv/internal/pkg/lib/file"
 	_shellUtils "github.com/easysoft/zv/internal/pkg/lib/shell"

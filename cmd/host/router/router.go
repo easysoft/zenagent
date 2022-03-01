@@ -1,8 +1,8 @@
 package hostRouter
 
 import (
-	hostHandler "github.com/easysoft/zv/cmd/agent-host/router/handler"
 	"github.com/easysoft/zv/cmd/agent/router/handler"
+	hostHandler "github.com/easysoft/zv/cmd/host/router/handler"
 	_httpUtils "github.com/easysoft/zv/internal/pkg/lib/http"
 	serverConf "github.com/easysoft/zv/internal/server/conf"
 	"github.com/kataras/iris/v12"
@@ -36,7 +36,9 @@ func (r *Router) App() {
 				client.Post("/add", r.JobCtrl.Add).Name = "创建任务"
 			})
 			v1.PartyFunc("/kvm", func(client iris.Party) {
+				client.Post("/listTempl", r.KvmCtrl.ListTempl).Name = "克隆虚机"
 				client.Post("/create", r.KvmCtrl.Create).Name = "创建虚机"
+				client.Post("/clone", r.KvmCtrl.Clone).Name = "克隆虚机"
 				client.Post("/{name:string}/destroy", r.KvmCtrl.Destroy).Name = "摧毁虚机"
 				client.Post("/{name:string}/reboot", r.KvmCtrl.Reboot).Name = "重启虚机"
 				client.Post("/{name:string}/suspend", r.KvmCtrl.Suspend).Name = "暂停虚机"

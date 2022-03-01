@@ -1,7 +1,7 @@
 package commonService
 
 import (
-	v1 "github.com/easysoft/zv/cmd/agent-host/router/v1"
+	v1 "github.com/easysoft/zv/cmd/host/router/v1"
 	"github.com/easysoft/zv/internal/pkg/domain"
 	"github.com/easysoft/zv/internal/server/model"
 )

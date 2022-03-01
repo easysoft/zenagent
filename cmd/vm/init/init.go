@@ -2,8 +2,8 @@ package vmInit
 
 import (
 	"fmt"
-	vmCron "github.com/easysoft/zv/cmd/agent-vm/cron"
-	vmRouter "github.com/easysoft/zv/cmd/agent-vm/router"
+	vmCron "github.com/easysoft/zv/cmd/vm/cron"
+	vmRouter "github.com/easysoft/zv/cmd/vm/router"
 	agentConf "github.com/easysoft/zv/internal/agent/conf"
 	consts "github.com/easysoft/zv/internal/comm/const"
 	"github.com/easysoft/zv/internal/pkg/db"

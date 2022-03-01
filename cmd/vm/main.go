@@ -2,7 +2,7 @@ package main
 
 import (
 	"flag"
-	hostInit "github.com/easysoft/zv/cmd/agent-host/init"
+	vmInit "github.com/easysoft/zv/cmd/vm/init"
 	"github.com/easysoft/zv/internal/agent/conf"
 	"github.com/easysoft/zv/internal/agent/utils/common"
 	"github.com/easysoft/zv/internal/agent/utils/const"
@@ -20,7 +20,7 @@ var (
 	runMode string
 )
 
-// @title ZAgent宿主机API文档
+// @title ZAgent虚拟机API文档
 // @version 1.0
 // @contact.name API Support
 // @contact.url https://github.com/easysoft/zv/issues
@@ -34,12 +34,12 @@ func main() {
 		os.Exit(0)
 	}()
 
-	flagSet = flag.NewFlagSet(consts.AppNameAgentHost, flag.ContinueOnError)
+	flagSet = flag.NewFlagSet(consts.AppNameAgentVm, flag.ContinueOnError)
 
-	flagSet.StringVar(&runMode, "t", agentConst.Host.ToString(), "")
-	flagSet.StringVar(&agentConf.Inst.Server, "s", "http://127.0.0.1:8085", "")
+	flagSet.StringVar(&runMode, "t", agentConst.Vm.ToString(), "")
+	flagSet.StringVar(&agentConf.Inst.Server, "s", "http://192.168.0.107:8085", "")
 	flagSet.StringVar(&agentConf.Inst.NodeName, "n", "", "")
-	flagSet.StringVar(&agentConf.Inst.NodeIp, "i", "127.0.0.1", "")
+	flagSet.StringVar(&agentConf.Inst.NodeIp, "i", "", "")
 	flagSet.IntVar(&agentConf.Inst.NodePort, "p", 8086, "")
 	flagSet.StringVar(&agentConf.Inst.Language, "l", "zh", "")
 
@@ -52,7 +52,7 @@ func main() {
 
 	switch action {
 	case "help", "-h":
-		agentUtils.PrintUsage(consts.AppNameAgentHost)
+		agentUtils.PrintUsage(consts.AppNameAgentVm)
 
 	default:
 		start()
@@ -60,11 +60,11 @@ func main() {
 }
 
 func start() {
-	_logUtils.Init(consts.AppNameAgentHost)
+	_logUtils.Init(consts.AppNameAgentVm)
 
 	if err := flagSet.Parse(os.Args[1:]); err == nil {
 		agentConf.Inst.RunMode = agentConst.RunMode(runMode)
-		hostInit.Init()
+		vmInit.Init()
 	}
 }
 

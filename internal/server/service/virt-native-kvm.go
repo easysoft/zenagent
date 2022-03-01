@@ -1,7 +1,7 @@
 package serverService
 
 import (
-	v1 "github.com/easysoft/zv/cmd/agent-host/router/v1"
+	v1 "github.com/easysoft/zv/cmd/host/router/v1"
 	"github.com/easysoft/zv/internal/comm/const"
 	"github.com/easysoft/zv/internal/comm/domain"
 	_domain "github.com/easysoft/zv/internal/pkg/domain"
@@ -37,7 +37,7 @@ func (s NativeKvmService) CreateRemote(hostId, backingId, tmplId, queueId uint) 
 
 	tmpl := s.TmplRepo.Get(tmplId)
 
-	macAddress := s.VmCommonService.genValidMacAddress() // get a unique mac address
+	macAddress := s.VmCommonService.genValidMacAddressWithDb() // get a unique mac address
 
 	vm := model.Vm{
 		HostId: host.ID, HostName: host.Name,

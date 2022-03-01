@@ -2,12 +2,12 @@ package hostInit
 
 import (
 	"fmt"
-	hostCron "github.com/easysoft/zv/cmd/agent-host/cron"
-	hostRouter "github.com/easysoft/zv/cmd/agent-host/router"
-	hostAgentService "github.com/easysoft/zv/internal/agent-host/service"
-	hostKvmService "github.com/easysoft/zv/internal/agent-host/service/kvm"
+	hostCron "github.com/easysoft/zv/cmd/host/cron"
+	hostRouter "github.com/easysoft/zv/cmd/host/router"
 	agentConf "github.com/easysoft/zv/internal/agent/conf"
 	consts "github.com/easysoft/zv/internal/comm/const"
+	hostAgentService "github.com/easysoft/zv/internal/host/service"
+	hostKvmService "github.com/easysoft/zv/internal/host/service/kvm"
 	"github.com/easysoft/zv/internal/pkg/db"
 	_commonUtils "github.com/easysoft/zv/internal/pkg/lib/common"
 	serverConf "github.com/easysoft/zv/internal/server/conf"

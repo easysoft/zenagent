@@ -1,7 +1,7 @@
 package model
 
 import (
-	v1 "github.com/easysoft/zv/cmd/agent-host/router/v1"
+	v1 "github.com/easysoft/zv/cmd/host/router/v1"
 	"github.com/easysoft/zv/internal/comm/const"
 	"time"
 )

@@ -4,7 +4,7 @@ import "C"
 import (
 	"encoding/json"
 	"fmt"
-	v1 "github.com/easysoft/zv/cmd/agent-host/router/v1"
+	v1 "github.com/easysoft/zv/cmd/host/router/v1"
 	agentConf "github.com/easysoft/zv/internal/agent/conf"
 	"github.com/easysoft/zv/internal/comm/const"
 	"github.com/easysoft/zv/internal/comm/domain"
@@ -14,6 +14,7 @@ import (
 	"github.com/libvirt/libvirt-go"
 	"github.com/libvirt/libvirt-go-xml"
 	"path/filepath"
+	"strings"
 )
 
 const (
@@ -40,6 +41,27 @@ func NewLibvirtService() *LibvirtService {
 	s.Connect(connStr)
 
 	return s
+}
+
+func (s *LibvirtService) ListTempl() (ret []libvirt.Domain, err error) {
+	if s.LibvirtConn == nil {
+		return
+	}
+
+	domains, err := s.LibvirtConn.ListAllDomains(0)
+	if err != nil {
+		_logUtils.Errorf(err.Error())
+		return
+	}
+
+	for _, domain := range domains {
+		name, _ := domain.GetName()
+		if strings.Index(name, "templ-") > -1 {
+			ret = append(ret, domain)
+		}
+	}
+
+	return
 }
 
 func (s *LibvirtService) CreateVm(req *v1.KvmReq, removeSameName bool) (dom *libvirt.Domain,
@@ -95,12 +117,64 @@ func (s *LibvirtService) CreateVm(req *v1.KvmReq, removeSameName bool) (dom *lib
 	return
 }
 
-func (s *LibvirtService) ListVm() (doms []libvirt.Domain) {
+func (s *LibvirtService) CloneVm(req *v1.KvmReqClone, removeSameName bool) (dom *libvirt.Domain,
+	vmVncPort int, vmRawPath, vmBackingPath string, err error) {
+
+	reqMsg, err := json.Marshal(req)
+	_logUtils.Infof("%s", reqMsg)
+
+	vmMacAddress := req.VmMacAddress
+	vmUniqueName := req.VmUniqueName
+
+	vmCpu := req.VmCpu
+	vmMemorySize := req.VmMemorySize
+	vmDiskSize := req.VmDiskSize
+
+	if removeSameName {
+		s.DestroyVmByName(vmUniqueName, true)
+	}
+
+	tmplXml := s.GetVmDef("vmTemplateName") // TODO:
+	vmXml := ""
+	vmXml, vmRawPath, _ = s.QemuService.GenVmDef(tmplXml, vmMacAddress, vmUniqueName, vmBackingPath, vmCpu, vmMemorySize)
+	if err != nil {
+		_logUtils.Errorf("err gen vm xml, err %s", err.Error())
+		return
+	}
+
+	err = s.QemuService.createDiskFile(vmBackingPath, vmUniqueName, vmDiskSize)
+	if err != nil {
+		_logUtils.Errorf(err.Error())
+		return
+	}
+
+	dom, err = s.LibvirtConn.DomainCreateXML(vmXml, libvirt.DOMAIN_NONE)
+	if err != nil {
+		_logUtils.Errorf(err.Error())
+		return
+	}
+
+	newXml := ""
+	newXml, err = dom.GetXMLDesc(0)
+	if err != nil {
+		return
+	}
+
+	newDomCfg := &libvirtxml.Domain{}
+	err = newDomCfg.Unmarshal(newXml)
+
+	vmMacAddress = newDomCfg.Devices.Interfaces[0].MAC.Address
+	vmVncPort = newDomCfg.Devices.Graphics[0].VNC.Port
+
+	return
+}
+
+func (s *LibvirtService) ListVm() (domains []libvirt.Domain) {
 	if s.LibvirtConn == nil {
 		return
 	}
 
-	doms, err := s.LibvirtConn.ListAllDomains(0)
+	domains, err := s.LibvirtConn.ListAllDomains(0)
 	if err != nil {
 		_logUtils.Errorf(err.Error())
 		return
