@@ -85,8 +85,12 @@ func (s *LibvirtService) ListTmpl() (ret []v1.KvmRespTempl, err error) {
 
 			mainDiskIndex := s.QemuService.GetMainDiskIndex(domainCfg)
 			tmpl.DiskFile = domainCfg.Devices.Disks[mainDiskIndex].Source.File.File
-			tmpl.BackingFile = domainCfg.Devices.Disks[mainDiskIndex].BackingStore.Source.File.File
-			tmpl.BackingFormat = domainCfg.Devices.Disks[mainDiskIndex].BackingStore.Format.Type
+
+			backingStore := domainCfg.Devices.Disks[mainDiskIndex].BackingStore
+			if backingStore != nil {
+				tmpl.BackingFile = backingStore.Source.File.File
+				tmpl.BackingFormat = backingStore.Format.Type
+			}
 
 			ret = append(ret, tmpl)
 		}
