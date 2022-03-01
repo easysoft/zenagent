@@ -43,7 +43,7 @@ func NewLibvirtService() *LibvirtService {
 	return s
 }
 
-func (s *LibvirtService) ListTempl() (ret []libvirt.Domain, err error) {
+func (s *LibvirtService) ListTmpl() (ret []libvirt.Domain, err error) {
 	if s.LibvirtConn == nil {
 		return
 	}
@@ -56,7 +56,7 @@ func (s *LibvirtService) ListTempl() (ret []libvirt.Domain, err error) {
 
 	for _, domain := range domains {
 		name, _ := domain.GetName()
-		if strings.Index(name, "templ-") > -1 {
+		if strings.Index(name, "tmpl-") > -1 {
 			ret = append(ret, domain)
 		}
 	}

@@ -26,7 +26,7 @@ func NewKvmCtrl() *KvmCtrl {
 // @Success 200 {object} _httpUtils.Response{data=v1.KvmResp} "code = success? 1 : 0"
 // @Router /api/v1/kvm/create [post]
 func (c *KvmCtrl) ListTempl(ctx iris.Context) {
-	domains, err := c.LibvirtService.ListTempl()
+	domains, err := c.LibvirtService.ListTmpl()
 
 	if err != nil {
 		ctx.JSON(_httpUtils.ApiRes(iris.StatusInternalServerError, "fail to create vm", err))
