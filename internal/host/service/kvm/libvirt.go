@@ -87,7 +87,7 @@ func (s *LibvirtService) ListTmpl() (ret []v1.KvmRespTempl, err error) {
 			tmpl.DiskFile = domainCfg.Devices.Disks[mainDiskIndex].Source.File.File
 
 			backingStore := domainCfg.Devices.Disks[mainDiskIndex].BackingStore
-			if backingStore != nil {
+			if backingStore != nil && backingStore.Source.File != nil {
 				tmpl.BackingFile = backingStore.Source.File.File
 				tmpl.BackingFormat = backingStore.Format.Type
 			}
