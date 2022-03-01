@@ -19,12 +19,10 @@ func NewKvmCtrl() *KvmCtrl {
 }
 
 // ListTempl
-// @summary 获取KVM虚拟机模板
-// @Accept json
+// @summary 获取KVM虚拟机模板信息
 // @Produce json
-// @Param task body v1.KvmReq true "Kvm Request Object"
-// @Success 200 {object} _httpUtils.Response{data=v1.KvmResp} "code = success? 1 : 0"
-// @Router /api/v1/kvm/create [post]
+// @Success 200 {object} _httpUtils.Response{data=[]v1.KvmRespTempl} "code = success? 1 : 0"
+// @Router /api/v1/kvm/listTempl [get]
 func (c *KvmCtrl) ListTempl(ctx iris.Context) {
 	domainCfgs, err := c.LibvirtService.ListTmpl()
 

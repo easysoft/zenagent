@@ -37,7 +37,7 @@ func (r *Router) App() {
 				client.Post("/add", r.JobCtrl.Add).Name = "创建任务"
 			})
 			v1.PartyFunc("/kvm", func(client iris.Party) {
-				client.Post("/listTempl", r.KvmCtrl.ListTempl).Name = "克隆虚机"
+				client.Get("/listTempl", r.KvmCtrl.ListTempl).Name = "克隆虚机"
 				client.Post("/create", r.KvmCtrl.Create).Name = "创建虚机"
 				client.Post("/clone", r.KvmCtrl.Clone).Name = "克隆虚机"
 				client.Post("/{name:string}/destroy", r.KvmCtrl.Destroy).Name = "摧毁虚机"
