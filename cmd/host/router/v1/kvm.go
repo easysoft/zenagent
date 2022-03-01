@@ -1,6 +1,8 @@
 package v1
 
-import "github.com/easysoft/zv/internal/comm/const"
+import (
+	"github.com/easysoft/zv/internal/comm/const"
+)
 
 type KvmReq struct {
 	VmMacAddress   string `json:"vmMacAddress"`
@@ -43,4 +45,18 @@ type KvmResp struct {
 }
 type KvmRespTempl struct {
 	Name string `json:"name"`
+	Type string `json:"type"`
+	UUID string `json:"uuid"`
+
+	CpuCoreNum  uint   `json:"cpuCoreNum"`
+	MemoryValue uint   `json:"memoryValue"`
+	MemoryUnit  string `json:"memoryUnit"`
+
+	OsArch        string `json:"osArch"`
+	MacAddress    string `json:"macAddress"`
+	DiskFile      string `json:"diskFile"`
+	BackingFile   string `json:"backingFile"`
+	BackingFormat string `json:"backingFormat"`
+
+	VncPost int `json:"memoryValue"`
 }

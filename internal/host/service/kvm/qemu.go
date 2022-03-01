@@ -36,7 +36,7 @@ func (s *QemuService) GenVmDef(tmplXml, macAddress, vmName, backingPath string, 
 		return
 	}
 
-	mainDiskIndex := s.getMainDiskIndex(domCfg)
+	mainDiskIndex := s.GetMainDiskIndex(domCfg)
 
 	domCfg.Name = vmName
 	domCfg.UUID = _stringUtils.NewUuidWithSep()
@@ -110,7 +110,7 @@ func (s *QemuService) GenVmDefTest(src, vmName, rawPath, backingPath string, vmC
 		return
 	}
 
-	mainDiskIndex := s.getMainDiskIndex(domCfg)
+	mainDiskIndex := s.GetMainDiskIndex(domCfg)
 
 	domCfg.Name = vmName
 	domCfg.UUID = _stringUtils.NewUuidWithSep()
@@ -275,7 +275,7 @@ func (s *QemuService) setVmProps(vm *domain.Vm) {
 		osVersion, osLang.ToString())
 }
 
-func (s *QemuService) getMainDiskIndex(domCfg *libvirtxml.Domain) (ret int) {
+func (s *QemuService) GetMainDiskIndex(domCfg *libvirtxml.Domain) (ret int) {
 	for index, item := range domCfg.Devices.Disks {
 		if item.Device == "disk" && strings.Index(item.Source.File.File, "share") < 0 {
 			ret = index
@@ -323,7 +323,7 @@ func (s *QemuService) GetDisk(dom *libvirt.Domain) (path string, err error) {
 		return
 	}
 
-	mainDiskIndex := s.getMainDiskIndex(domCfg)
+	mainDiskIndex := s.GetMainDiskIndex(domCfg)
 	path = domCfg.Devices.Disks[mainDiskIndex].Source.File.File
 
 	return

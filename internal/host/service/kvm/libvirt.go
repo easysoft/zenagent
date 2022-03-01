@@ -43,7 +43,7 @@ func NewLibvirtService() *LibvirtService {
 	return s
 }
 
-func (s *LibvirtService) ListTmpl() (ret []libvirtxml.Domain, err error) {
+func (s *LibvirtService) ListTmpl() (ret []v1.KvmRespTempl, err error) {
 	if s.LibvirtConn == nil {
 		return
 	}
@@ -66,7 +66,29 @@ func (s *LibvirtService) ListTmpl() (ret []libvirtxml.Domain, err error) {
 			domainCfg := &libvirtxml.Domain{}
 			err = domainCfg.Unmarshal(newXml)
 
-			ret = append(ret, *domainCfg)
+			tmpl := v1.KvmRespTempl{
+				Name: domainCfg.Name,
+				Type: domainCfg.Type,
+				UUID: domainCfg.UUID,
+
+				CpuCoreNum:  domainCfg.VCPU.Value,
+				MemoryValue: domainCfg.Memory.Value,
+				MemoryUnit:  domainCfg.Memory.Unit,
+
+				OsArch:     domainCfg.OS.Type.Arch,
+				MacAddress: domainCfg.Devices.Interfaces[0].MAC.Address,
+			}
+
+			if len(domainCfg.Devices.Interfaces) > 0 {
+				tmpl.VncPost = domainCfg.Devices.Graphics[0].VNC.Port
+			}
+
+			mainDiskIndex := s.QemuService.GetMainDiskIndex(domainCfg)
+			tmpl.DiskFile = domainCfg.Devices.Disks[mainDiskIndex].Source.File.File
+			tmpl.BackingFile = domainCfg.Devices.Disks[mainDiskIndex].BackingStore.Source.File.File
+			tmpl.BackingFormat = domainCfg.Devices.Disks[mainDiskIndex].BackingStore.Format.Type
+
+			ret = append(ret, tmpl)
 		}
 	}
 

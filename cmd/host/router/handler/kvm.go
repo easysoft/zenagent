@@ -29,11 +29,11 @@ func (c *KvmCtrl) ListTempl(ctx iris.Context) {
 	domainCfgs, err := c.LibvirtService.ListTmpl()
 
 	if err != nil {
-		ctx.JSON(_httpUtils.ApiRes(iris.StatusInternalServerError, "fail to create vm", err))
+		ctx.JSON(_httpUtils.ApiRes(iris.StatusInternalServerError, "fail to list vm tmpl", err))
 		return
 	}
 
-	ctx.JSON(_httpUtils.ApiRes(iris.StatusOK, "success to create vm", domainCfgs))
+	ctx.JSON(_httpUtils.ApiRes(iris.StatusOK, "success to list vm tmpl", domainCfgs))
 
 	return
 }
