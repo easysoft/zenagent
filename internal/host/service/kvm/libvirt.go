@@ -160,7 +160,7 @@ func (s *LibvirtService) CloneVm(req *v1.KvmReqClone, removeSameName bool) (dom 
 	_logUtils.Infof("%s", reqMsg)
 
 	// get src vm config
-	tmplXml := s.GetVmDef(req.VmSrcName)
+	tmplXml := s.GetVmDef(req.VmSrc)
 	domCfg := &libvirtxml.Domain{}
 	err = domCfg.Unmarshal(tmplXml)
 	if err != nil {

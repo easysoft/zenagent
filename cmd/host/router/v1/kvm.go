@@ -26,12 +26,12 @@ type KvmReq struct {
 
 type KvmReqClone struct {
 	VmMacAddress string `json:"vmMacAddress"`
-	VmSrcName    string `json:"vmSrcName"`
-
 	VmUniqueName string `json:"vmUniqueName"`
-	VmCpu        uint   `json:"vmCpu"`
-	VmMemorySize uint   `json:"vmMemorySize"`
-	VmDiskSize   uint   `json:"vmDiskSize"`
+	VmSrc        string `json:"vmSrc"`
+
+	VmCpu        uint `json:"vmCpu"`
+	VmMemorySize uint `json:"vmMemorySize"`
+	VmDiskSize   uint `json:"vmDiskSize"`
 
 	StartAfterCreated bool `json:"startAfterCreated"`
 }
