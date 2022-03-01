@@ -80,8 +80,14 @@ func (c *KvmCtrl) Create(ctx iris.Context) {
 // @Router /api/v1/kvm/create [post]
 func (c *KvmCtrl) Clone(ctx iris.Context) {
 	req := v1.KvmReqClone{}
-	if err := ctx.ReadJSON(&req); err != nil {
+	err := ctx.ReadJSON(&req)
+	if err != nil {
 		_, _ = ctx.JSON(_httpUtils.ApiRes(iris.StatusInternalServerError, err.Error(), nil))
+		return
+	}
+
+	if req.VmSrc == "" {
+		_, _ = ctx.JSON(_httpUtils.ApiRes(iris.StatusInternalServerError, "request vmSrc field can not be empty.", nil))
 		return
 	}
 
