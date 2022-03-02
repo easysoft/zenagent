@@ -40,6 +40,8 @@ func (s *QemuService) GenVmDef(tmplXml, macAddress, vmName, backingPath string, 
 func (s *QemuService) GenVmDefFromCfg(domCfg *libvirtxml.Domain, macAddress, vmName, backingPath string, vmCpu, vmMemory uint) (
 	vmXml string, rawPath string, err error) {
 
+	rawPath = filepath.Join(agentConf.Inst.DirImage, vmName+".qcow2")
+
 	mainDiskIndex := s.GetMainDiskIndex(domCfg)
 
 	domCfg.Name = vmName
@@ -215,19 +217,17 @@ func (s *QemuService) GetBaseImagePath(vm domain.Vm) (path string) {
 	return
 }
 
-func (s *QemuService) createDiskFile(basePath, vmName string, diskSize uint) (err error) {
-	vmRawPath := filepath.Join(agentConf.Inst.DirImage, vmName+".qcow2")
-
+func (s *QemuService) createDiskFile(basePath, diskPath string, diskSize uint) (err error) {
 	var cmd string
 	if basePath == "" {
 		cmd = fmt.Sprintf("qemu-img create -f qcow2 %s %dG",
-			vmRawPath, diskSize/1000)
+			diskPath, diskSize/1000)
 	} else {
 		cmd = fmt.Sprintf("qemu-img create -f qcow2 -o cluster_size=2M,backing_file=%s %s %dG",
-			basePath, vmRawPath, diskSize/1000)
+			basePath, diskPath, diskSize/1000)
 	}
 
-	removeCmd := fmt.Sprintf("rm -rf %s", vmRawPath)
+	removeCmd := fmt.Sprintf("rm -rf %s", diskPath)
 	_shellUtils.ExeShellInDir(removeCmd, agentConf.Inst.DirKvm)
 
 	if agentConf.Inst.Host == "" { // local

@@ -94,7 +94,7 @@ func (c *KvmCtrl) Clone(ctx iris.Context) {
 	dom, vmVncPort, vmRawPath, vmBackingPath, err := c.LibvirtService.CloneVm(&req, true)
 
 	if err != nil {
-		ctx.JSON(_httpUtils.ApiRes(iris.StatusInternalServerError, "fail to create vm", err))
+		ctx.JSON(_httpUtils.ApiRes(iris.StatusInternalServerError, "fail to clone vm", err))
 		return
 	}
 

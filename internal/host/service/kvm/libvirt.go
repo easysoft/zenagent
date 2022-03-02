@@ -126,7 +126,7 @@ func (s *LibvirtService) CreateVm(req *v1.KvmReq, removeSameName bool) (dom *lib
 		return
 	}
 
-	err = s.QemuService.createDiskFile(vmBackingPath, vmUniqueName, vmDiskSize)
+	err = s.QemuService.createDiskFile(vmBackingPath, vmRawPath, vmDiskSize)
 	if err != nil {
 		_logUtils.Errorf(err.Error())
 		return
@@ -200,7 +200,7 @@ func (s *LibvirtService) CloneVm(req *v1.KvmReqClone, removeSameName bool) (dom 
 		return
 	}
 
-	err = s.QemuService.createDiskFile(vmBackingPath, vmUniqueName, vmDiskSize)
+	err = s.QemuService.createDiskFile(vmBackingPath, vmRawPath, vmDiskSize)
 	if err != nil {
 		_logUtils.Errorf(err.Error())
 		return
