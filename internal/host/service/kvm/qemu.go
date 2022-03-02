@@ -49,16 +49,19 @@ func (s *QemuService) GenVmDefFromCfg(domCfg *libvirtxml.Domain, macAddress, vmN
 	domCfg.Devices.Disks[mainDiskIndex].Source.File = &libvirtxml.DomainDiskSourceFile{
 		File: rawPath,
 	}
-	domCfg.Devices.Disks[mainDiskIndex].BackingStore = &libvirtxml.DomainDiskBackingStore{
-		Index: 0,
-		Format: &libvirtxml.DomainDiskFormat{
-			Type: "qcow2",
-		},
-		Source: &libvirtxml.DomainDiskSource{
-			File: &libvirtxml.DomainDiskSourceFile{
-				File: backingPath,
+
+	if backingPath != "" {
+		domCfg.Devices.Disks[mainDiskIndex].BackingStore = &libvirtxml.DomainDiskBackingStore{
+			Index: 0,
+			Format: &libvirtxml.DomainDiskFormat{
+				Type: "qcow2",
 			},
-		},
+			Source: &libvirtxml.DomainDiskSource{
+				File: &libvirtxml.DomainDiskSourceFile{
+					File: backingPath,
+				},
+			},
+		}
 	}
 
 	//<graphics type="vnc" port="-1" autoport="yes" listen="0.0.0.0" passwd="pass">
