@@ -77,7 +77,7 @@ func (c *KvmCtrl) Create(ctx iris.Context) {
 // @Produce json
 // @Param kvmReqClone body v1.KvmReqClone true "Kvm Request Object"
 // @Success 200 {object} _httpUtils.Response{data=v1.KvmResp} "code = success? 1 : 0"
-// @Router /api/v1/kvm/create [post]
+// @Router /api/v1/kvm/clone [post]
 func (c *KvmCtrl) Clone(ctx iris.Context) {
 	req := v1.KvmReqClone{}
 	err := ctx.ReadJSON(&req)

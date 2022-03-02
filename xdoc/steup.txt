@@ -24,7 +24,7 @@ sudo systemctl enable zv.service
 sudo systemctl disable zv.service
 
 
-# 本地安装swaggo，执行并上传。 https://github.com/swaggo/swag
+# 本地安装swaggo，生成并上传。 https://github.com/swaggo/swag
 rm -rf res/server/docs
 swag init --parseDependency --parseInternal --parseDepth 5 -d cmd/server -o res/server/docs
 rm -rf res/host/docs

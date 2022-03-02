@@ -565,7 +565,7 @@ paths:
           schema:
             $ref: '#/definitions/_httpUtils.Response'
       summary: 暂停KVM虚拟机
-  /api/v1/kvm/create:
+  /api/v1/kvm/clone:
     post:
       consumes:
       - application/json
@@ -589,6 +589,30 @@ paths:
                   $ref: '#/definitions/v1.KvmResp'
               type: object
       summary: 克隆KVM虚拟机
+  /api/v1/kvm/create:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Kvm Request Object
+        in: body
+        name: kvmReq
+        required: true
+        schema:
+          $ref: '#/definitions/v1.KvmReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'code = success? 1 : 0'
+          schema:
+            allOf:
+            - $ref: '#/definitions/_httpUtils.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/v1.KvmResp'
+              type: object
+      summary: 创建KVM虚拟机
   /api/v1/kvm/listTempl:
     get:
       produces:

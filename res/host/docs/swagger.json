@@ -178,7 +178,7 @@
                 }
             }
         },
-        "/api/v1/kvm/create": {
+        "/api/v1/kvm/clone": {
             "post": {
                 "consumes": [
                     "application/json"
@@ -195,6 +195,48 @@
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/v1.KvmReqClone"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "code = success? 1 : 0",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/_httpUtils.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/v1.KvmResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/kvm/create": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "创建KVM虚拟机",
+                "parameters": [
+                    {
+                        "description": "Kvm Request Object",
+                        "name": "kvmReq",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1.KvmReq"
                         }
                     }
                 ],
