@@ -220,14 +220,14 @@ func (s *QemuService) GetBaseImagePath(vm domain.Vm) (path string) {
 	return
 }
 
-func (s *QemuService) createDiskFile(basePath, diskPath string, diskSize uint) (err error) {
+func (s *QemuService) createDiskFile(backingPath, diskPath string, diskSize uint) (err error) {
 	var cmd string
-	if basePath == "" {
+	if backingPath == "" {
 		cmd = fmt.Sprintf("qemu-img create -f qcow2 %s %dG",
 			diskPath, diskSize/1000)
 	} else {
 		cmd = fmt.Sprintf("qemu-img create -f qcow2 -o cluster_size=2M,backing_file=%s %s %dG",
-			basePath, diskPath, diskSize/1000)
+			backingPath, diskPath, diskSize/1000)
 	}
 
 	removeCmd := fmt.Sprintf("rm -rf %s", diskPath)

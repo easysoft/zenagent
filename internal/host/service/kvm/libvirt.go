@@ -161,8 +161,8 @@ func (s *LibvirtService) CloneVm(req *v1.KvmReqClone, removeSameName bool) (dom 
 
 	// get src vm config
 	tmplXml := s.GetVmDef(req.VmSrc)
-	domCfg := &libvirtxml.Domain{}
-	err = domCfg.Unmarshal(tmplXml)
+	srcDomCfg := &libvirtxml.Domain{}
+	err = srcDomCfg.Unmarshal(tmplXml)
 	if err != nil {
 		return
 	}
@@ -179,16 +179,23 @@ func (s *LibvirtService) CloneVm(req *v1.KvmReqClone, removeSameName bool) (dom 
 
 	// update empty values from tmpl
 	if vmCpu == 0 {
-		vmCpu = domCfg.VCPU.Value
+		vmCpu = srcDomCfg.VCPU.Value
 	}
 	if vmMemorySize == 0 {
-		vmCpu = domCfg.Memory.Value
+		vmCpu = srcDomCfg.Memory.Value
 	}
+
+	// get BackingPath
+	mainDiskIndex := s.QemuService.GetMainDiskIndex(srcDomCfg)
 	if vmBackingPath == "" {
-		mainDiskIndex := s.QemuService.GetMainDiskIndex(domCfg)
-		backingStore := domCfg.Devices.Disks[mainDiskIndex].BackingStore
+		backingStore := srcDomCfg.Devices.Disks[mainDiskIndex].BackingStore
 		if backingStore != nil && backingStore.Source.File != nil {
 			vmBackingPath = backingStore.Source.File.File
+		}
+
+		// use src vm image as if src is a template without backing path
+		if vmBackingPath == "" {
+			vmBackingPath = srcDomCfg.Devices.Disks[mainDiskIndex].Source.File.File
 		}
 	}
 
