@@ -138,6 +138,7 @@ func (s *LibvirtService) CreateVm(req *v1.KvmReq, removeSameName bool) (dom *lib
 		return
 	}
 
+	// get new vm info
 	newXml := ""
 	newXml, err = dom.GetXMLDesc(0)
 	if err != nil {
