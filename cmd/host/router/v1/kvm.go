@@ -9,31 +9,31 @@ type KvmReq struct {
 	VmTemplateName string `json:"vmTemplate"`
 	VmBackingPath  string `json:"vmBacking"`
 
-	VmUniqueName  string `json:"vmUniqueName"`
-	VmCpu         uint   `json:"vmCpu"`
-	VmMemorySize  uint   `json:"vmMemorySize"`
-	VmDiskSize    uint   `json:"vmDiskSize"`
+	VmUniqueName  string `json:"vmUniqueName" example:"test-win10-x64-pro-zh_cn"`
+	VmCpu         uint   `json:"vmCpu" example:"3"`
+	VmMemorySize  uint   `json:"vmMemorySize" example:"5120000"`
+	VmDiskSize    uint   `json:"vmDiskSize" example:"30000"`
 	VmCdromSys    string `json:"vmCdromSys"`
 	VmCdromDriver string `json:"vmCdromDriver"`
 
 	OsCategory consts.OsCategory `json:"osCategory" example:"windows"` // Enums consts.OsCategory
 	OsType     consts.OsType     `json:"osType" example:"win10"`       // Enums consts.OsType
-	OsVersion  string            `json:"osVersion"`
+	OsVersion  string            `json:"osVersion" example:"x64-pro"`
 	OsLang     consts.OsLang     `json:"osLang" example:"zh_cn"` // Enums consts.OsLang
 
-	StartAfterCreated bool `json:"startAfterCreated"`
+	//StartAfterCreated bool `json:"startAfterCreated"`
 }
 
 type KvmReqClone struct {
 	VmMacAddress string `json:"vmMacAddress"`
-	VmUniqueName string `json:"vmUniqueName"`
-	VmSrc        string `json:"vmSrc"`
+	VmUniqueName string `json:"vmUniqueName" example:"test-win10-x64-pro-zh_cn-clone1"`
+	VmSrc        string `json:"vmSrc" example:"test-win10-x64-pro-zh_cn"`
 
-	VmCpu        uint `json:"vmCpu"`
-	VmMemorySize uint `json:"vmMemorySize"`
-	VmDiskSize   uint `json:"vmDiskSize"`
+	VmCpu        uint `json:"vmCpu" example:"3"`
+	VmMemorySize uint `json:"vmMemorySize" example:"5120000"`
+	VmDiskSize   uint `json:"vmDiskSize" example:"30000"`
 
-	StartAfterCreated bool `json:"startAfterCreated"`
+	//StartAfterCreated bool `json:"startAfterCreated"`
 }
 
 type KvmResp struct {

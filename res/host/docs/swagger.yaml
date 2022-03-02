@@ -223,9 +223,8 @@ definitions:
         example: win10
         type: string
       osVersion:
+        example: x64-pro
         type: string
-      startAfterCreated:
-        type: boolean
       vmBacking:
         type: string
       vmCdromDriver:
@@ -233,16 +232,40 @@ definitions:
       vmCdromSys:
         type: string
       vmCpu:
+        example: 3
         type: integer
       vmDiskSize:
+        example: 30000
         type: integer
       vmMacAddress:
         type: string
       vmMemorySize:
+        example: 5120000
         type: integer
       vmTemplate:
         type: string
       vmUniqueName:
+        example: test-win10-x64-pro-zh_cn
+        type: string
+    type: object
+  v1.KvmReqClone:
+    properties:
+      vmCpu:
+        example: 3
+        type: integer
+      vmDiskSize:
+        example: 30000
+        type: integer
+      vmMacAddress:
+        type: string
+      vmMemorySize:
+        example: 5120000
+        type: integer
+      vmSrc:
+        example: test-win10-x64-pro-zh_cn
+        type: string
+      vmUniqueName:
+        example: test-win10-x64-pro-zh_cn-clone1
         type: string
     type: object
   v1.KvmResp:
@@ -256,6 +279,67 @@ definitions:
       name:
         type: string
       vncPort:
+        type: string
+    type: object
+  v1.KvmRespTempl:
+    properties:
+      backingFile:
+        type: string
+      backingFormat:
+        type: string
+      cpuCoreNum:
+        type: integer
+      diskFile:
+        type: string
+      macAddress:
+        type: string
+      memoryUnit:
+        type: string
+      memoryValue:
+        type: integer
+      name:
+        type: string
+      osArch:
+        type: string
+      type:
+        type: string
+      uuid:
+        type: string
+    type: object
+  v1.MultiPassReq:
+    properties:
+      cpus:
+        type: integer
+      disk:
+        type: integer
+      imgFrom:
+        type: string
+      imgPath:
+        type: string
+      password:
+        type: string
+      userName:
+        type: string
+      vmMemory:
+        type: integer
+      vmName:
+        type: string
+    type: object
+  v1.MultiPassResp:
+    properties:
+      cpus:
+        type: string
+      image:
+        type: string
+      ipv4:
+        type: string
+      memory:
+        type: string
+      name:
+        type: string
+      network:
+        type: string
+      state:
         type: string
     type: object
   v1.VmWareReq:
@@ -301,12 +385,12 @@ info:
   title: ZAgent宿主机API文档
   version: "1.0"
 paths:
-  /api/v1/kvm/{name}/destroy:
+  /api/v1/MultiPass/{name}/reboot:
     post:
       consumes:
       - application/json
       parameters:
-      - description: Kvm Name
+      - description: MultiPass Name
         in: path
         name: name
         required: true
@@ -318,7 +402,115 @@ paths:
           description: 'code = success? 1 : 0'
           schema:
             $ref: '#/definitions/_httpUtils.Response'
-      summary: 摧毁KVM虚拟机
+      summary: 重启MultiPass虚拟机
+  /api/v1/MultiPass/{name}/resume:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: MultiPass Name
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'code = success? 1 : 0'
+          schema:
+            $ref: '#/definitions/_httpUtils.Response'
+      summary: 恢复MultiPass虚拟机
+  /api/v1/MultiPass/{name}/suspend:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: MultiPass Name
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'code = success? 1 : 0'
+          schema:
+            $ref: '#/definitions/_httpUtils.Response'
+      summary: 暂停MultiPass虚拟机
+  /api/v1/MultiPass/create:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: MultiPass Request Object
+        in: body
+        name: task
+        required: true
+        schema:
+          $ref: '#/definitions/v1.MultiPassReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'code = success? 1 : 0'
+          schema:
+            allOf:
+            - $ref: '#/definitions/_httpUtils.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/v1.MultiPassResp'
+              type: object
+      summary: 创建MultiPass虚拟机
+  /api/v1/MultiPass/list:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: MultiPass Request Object
+        in: body
+        name: task
+        required: true
+        schema:
+          $ref: '#/definitions/v1.MultiPassReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'code = success? 1 : 0'
+          schema:
+            allOf:
+            - $ref: '#/definitions/_httpUtils.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/v1.MultiPassResp'
+              type: object
+      summary: 获取MultiPass虚拟机
+  /api/v1/kvm/{name}/destroy:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: VmWare Request Object
+        in: body
+        name: task
+        required: true
+        schema:
+          $ref: '#/definitions/v1.VmWareReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'code = success? 1 : 0'
+          schema:
+            allOf:
+            - $ref: '#/definitions/_httpUtils.Response'
+            - properties:
+                data:
+                  type: integer
+              type: object
+      summary: 摧毁VmWare虚拟机
   /api/v1/kvm/{name}/reboot:
     post:
       consumes:
@@ -380,10 +572,10 @@ paths:
       parameters:
       - description: Kvm Request Object
         in: body
-        name: task
+        name: kvmReqClone
         required: true
         schema:
-          $ref: '#/definitions/v1.KvmReq'
+          $ref: '#/definitions/v1.KvmReqClone'
       produces:
       - application/json
       responses:
@@ -396,26 +588,72 @@ paths:
                 data:
                   $ref: '#/definitions/v1.KvmResp'
               type: object
-      summary: 创建KVM虚拟机
-  /api/v1/vmware/create:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: Build Request Object
-        in: body
-        name: task
-        required: true
-        schema:
-          $ref: '#/definitions/domain.Build'
+      summary: 克隆KVM虚拟机
+  /api/v1/kvm/listTempl:
+    get:
       produces:
       - application/json
       responses:
         "200":
           description: 'code = success? 1 : 0'
           schema:
-            $ref: '#/definitions/_httpUtils.Response'
-      summary: 创建任务
+            allOf:
+            - $ref: '#/definitions/_httpUtils.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/v1.KvmRespTempl'
+                  type: array
+              type: object
+      summary: 获取KVM虚拟机模板信息
+  /api/v1/multipass/{name}/destroy:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: MultiPass Request Object
+        in: body
+        name: task
+        required: true
+        schema:
+          $ref: '#/definitions/v1.MultiPassReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'code = success? 1 : 0'
+          schema:
+            allOf:
+            - $ref: '#/definitions/_httpUtils.Response'
+            - properties:
+                data:
+                  type: integer
+              type: object
+      summary: 摧毁MultiPass虚拟机
+  /api/v1/vmware/create:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: VmWare Request Object
+        in: body
+        name: task
+        required: true
+        schema:
+          $ref: '#/definitions/v1.VmWareReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'code = success? 1 : 0'
+          schema:
+            allOf:
+            - $ref: '#/definitions/_httpUtils.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/v1.VmWareResp'
+              type: object
+      summary: 创建VmWare虚拟机
   /api/v1/vnc/getToken:
     get:
       consumes:

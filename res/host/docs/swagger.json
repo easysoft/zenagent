@@ -10,6 +10,174 @@
         "version": "1.0"
     },
     "paths": {
+        "/api/v1/MultiPass/create": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "创建MultiPass虚拟机",
+                "parameters": [
+                    {
+                        "description": "MultiPass Request Object",
+                        "name": "task",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1.MultiPassReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "code = success? 1 : 0",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/_httpUtils.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/v1.MultiPassResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/MultiPass/list": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "获取MultiPass虚拟机",
+                "parameters": [
+                    {
+                        "description": "MultiPass Request Object",
+                        "name": "task",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1.MultiPassReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "code = success? 1 : 0",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/_httpUtils.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/v1.MultiPassResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/MultiPass/{name}/reboot": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "重启MultiPass虚拟机",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "MultiPass Name",
+                        "name": "name",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "code = success? 1 : 0",
+                        "schema": {
+                            "$ref": "#/definitions/_httpUtils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/MultiPass/{name}/resume": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "恢复MultiPass虚拟机",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "MultiPass Name",
+                        "name": "name",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "code = success? 1 : 0",
+                        "schema": {
+                            "$ref": "#/definitions/_httpUtils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/MultiPass/{name}/suspend": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "暂停MultiPass虚拟机",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "MultiPass Name",
+                        "name": "name",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "code = success? 1 : 0",
+                        "schema": {
+                            "$ref": "#/definitions/_httpUtils.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/kvm/create": {
             "post": {
                 "consumes": [
@@ -18,15 +186,15 @@
                 "produces": [
                     "application/json"
                 ],
-                "summary": "创建KVM虚拟机",
+                "summary": "克隆KVM虚拟机",
                 "parameters": [
                     {
                         "description": "Kvm Request Object",
-                        "name": "task",
+                        "name": "kvmReqClone",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/v1.KvmReq"
+                            "$ref": "#/definitions/v1.KvmReqClone"
                         }
                     }
                 ],
@@ -52,6 +220,37 @@
                 }
             }
         },
+        "/api/v1/kvm/listTempl": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "获取KVM虚拟机模板信息",
+                "responses": {
+                    "200": {
+                        "description": "code = success? 1 : 0",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/_httpUtils.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/v1.KvmRespTempl"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/kvm/{name}/destroy": {
             "post": {
                 "consumes": [
@@ -60,21 +259,35 @@
                 "produces": [
                     "application/json"
                 ],
-                "summary": "摧毁KVM虚拟机",
+                "summary": "摧毁VmWare虚拟机",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "Kvm Name",
-                        "name": "name",
-                        "in": "path",
-                        "required": true
+                        "description": "VmWare Request Object",
+                        "name": "task",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1.VmWareReq"
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "code = success? 1 : 0",
                         "schema": {
-                            "$ref": "#/definitions/_httpUtils.Response"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/_httpUtils.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 }
@@ -164,6 +377,48 @@
                 }
             }
         },
+        "/api/v1/multipass/{name}/destroy": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "摧毁MultiPass虚拟机",
+                "parameters": [
+                    {
+                        "description": "MultiPass Request Object",
+                        "name": "task",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1.MultiPassReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "code = success? 1 : 0",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/_httpUtils.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/vmware/create": {
             "post": {
                 "consumes": [
@@ -172,15 +427,15 @@
                 "produces": [
                     "application/json"
                 ],
-                "summary": "创建任务",
+                "summary": "创建VmWare虚拟机",
                 "parameters": [
                     {
-                        "description": "Build Request Object",
+                        "description": "VmWare Request Object",
                         "name": "task",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domain.Build"
+                            "$ref": "#/definitions/v1.VmWareReq"
                         }
                     }
                 ],
@@ -188,7 +443,19 @@
                     "200": {
                         "description": "code = success? 1 : 0",
                         "schema": {
-                            "$ref": "#/definitions/_httpUtils.Response"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/_httpUtils.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/v1.VmWareResp"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 }
@@ -556,10 +823,8 @@
                     "example": "win10"
                 },
                 "osVersion": {
-                    "type": "string"
-                },
-                "startAfterCreated": {
-                    "type": "boolean"
+                    "type": "string",
+                    "example": "x64-pro"
                 },
                 "vmBacking": {
                     "type": "string"
@@ -571,22 +836,54 @@
                     "type": "string"
                 },
                 "vmCpu": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 3
                 },
                 "vmDiskSize": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 30000
                 },
                 "vmMacAddress": {
                     "type": "string"
                 },
                 "vmMemorySize": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 5120000
                 },
                 "vmTemplate": {
                     "type": "string"
                 },
                 "vmUniqueName": {
+                    "type": "string",
+                    "example": "test-win10-x64-pro-zh_cn"
+                }
+            }
+        },
+        "v1.KvmReqClone": {
+            "type": "object",
+            "properties": {
+                "vmCpu": {
+                    "type": "integer",
+                    "example": 3
+                },
+                "vmDiskSize": {
+                    "type": "integer",
+                    "example": 30000
+                },
+                "vmMacAddress": {
                     "type": "string"
+                },
+                "vmMemorySize": {
+                    "type": "integer",
+                    "example": 5120000
+                },
+                "vmSrc": {
+                    "type": "string",
+                    "example": "test-win10-x64-pro-zh_cn"
+                },
+                "vmUniqueName": {
+                    "type": "string",
+                    "example": "test-win10-x64-pro-zh_cn-clone1"
                 }
             }
         },
@@ -606,6 +903,99 @@
                     "type": "string"
                 },
                 "vncPort": {
+                    "type": "string"
+                }
+            }
+        },
+        "v1.KvmRespTempl": {
+            "type": "object",
+            "properties": {
+                "backingFile": {
+                    "type": "string"
+                },
+                "backingFormat": {
+                    "type": "string"
+                },
+                "cpuCoreNum": {
+                    "type": "integer"
+                },
+                "diskFile": {
+                    "type": "string"
+                },
+                "macAddress": {
+                    "type": "string"
+                },
+                "memoryUnit": {
+                    "type": "string"
+                },
+                "memoryValue": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "osArch": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "uuid": {
+                    "type": "string"
+                }
+            }
+        },
+        "v1.MultiPassReq": {
+            "type": "object",
+            "properties": {
+                "cpus": {
+                    "type": "integer"
+                },
+                "disk": {
+                    "type": "integer"
+                },
+                "imgFrom": {
+                    "type": "string"
+                },
+                "imgPath": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "userName": {
+                    "type": "string"
+                },
+                "vmMemory": {
+                    "type": "integer"
+                },
+                "vmName": {
+                    "type": "string"
+                }
+            }
+        },
+        "v1.MultiPassResp": {
+            "type": "object",
+            "properties": {
+                "cpus": {
+                    "type": "string"
+                },
+                "image": {
+                    "type": "string"
+                },
+                "ipv4": {
+                    "type": "string"
+                },
+                "memory": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "network": {
+                    "type": "string"
+                },
+                "state": {
                     "type": "string"
                 }
             }
