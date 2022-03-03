@@ -66,7 +66,8 @@ func GenKvmReq(po Vm) (req v1.KvmReq) {
 		OsLang:     po.OsLang,
 
 		VmDiskSize: po.DiskSize, VmMemorySize: po.MemorySize,
-		VmCdromSys: po.CdromSys, VmCdromDriver: po.CdromDriver}
+		//VmCdromSys: po.CdromSys, VmCdromDriver: po.CdromDriver
+	}
 
 	return
 }
