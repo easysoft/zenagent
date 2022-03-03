@@ -58,7 +58,7 @@ type Vm struct {
 func GenKvmReq(po Vm) (req v1.KvmReq) {
 	req = v1.KvmReq{
 		VmMacAddress: po.MacAddress, VmUniqueName: po.Name,
-		VmBackingPath: po.BackingPath, VmTemplateName: po.TmplName,
+		VmBacking: po.BackingPath, VmTemplate: po.TmplName,
 
 		OsCategory: po.OsCategory,
 		OsType:     po.OsType,

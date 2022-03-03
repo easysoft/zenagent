@@ -5,9 +5,9 @@ import (
 )
 
 type KvmReq struct {
-	VmMacAddress   string `json:"vmMacAddress"`
-	VmTemplateName string `json:"vmTemplate"`
-	VmBackingPath  string `json:"vmBacking"`
+	VmMacAddress string `json:"vmMacAddress"`
+	VmTemplate   string `json:"vmTemplate"`
+	VmBacking    string `json:"vmBacking"`
 
 	VmUniqueName  string `json:"vmUniqueName" example:"test-win10-x64-pro-zh_cn"`
 	VmCpu         uint   `json:"vmCpu" example:"3"`

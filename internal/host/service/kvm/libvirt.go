@@ -107,8 +107,8 @@ func (s *LibvirtService) CreateVm(req *v1.KvmReq, removeSameName bool) (dom *lib
 
 	vmMacAddress := req.VmMacAddress
 	vmUniqueName := req.VmUniqueName
-	vmBackingPath = filepath.Join(agentConf.Inst.DirKvm, req.VmBackingPath)
-	vmTemplateName := req.VmTemplateName
+	vmBackingPath = filepath.Join(agentConf.Inst.DirKvm, req.VmBacking)
+	vmTemplateName := req.VmTemplate
 	vmCpu := req.VmCpu
 	vmMemorySize := req.VmMemorySize
 	vmDiskSize := req.VmDiskSize
@@ -117,8 +117,21 @@ func (s *LibvirtService) CreateVm(req *v1.KvmReq, removeSameName bool) (dom *lib
 		s.DestroyVmByName(vmUniqueName, true)
 	}
 
-	// gen xml definition
+	// gen tmpl xml definition
 	tmplXml := s.GetVmDef(vmTemplateName)
+	tmplDomCfg := &libvirtxml.Domain{}
+	err = tmplDomCfg.Unmarshal(tmplXml)
+	if err != nil {
+		return
+	}
+
+	// get BackingPath
+	mainDiskIndex := s.QemuService.GetMainDiskIndex(tmplDomCfg)
+	if vmBackingPath == "" {
+		// use tmpl vm's image as backing path
+		vmBackingPath = tmplDomCfg.Devices.Disks[mainDiskIndex].Source.File.File
+	}
+
 	vmXml := ""
 	vmXml, vmRawPath, _ = s.QemuService.GenVmDef(tmplXml, vmMacAddress, vmUniqueName, vmBackingPath, vmCpu, vmMemorySize)
 	if err != nil {
@@ -189,6 +202,7 @@ func (s *LibvirtService) CloneVm(req *v1.KvmReqClone, removeSameName bool) (dom 
 	// get BackingPath
 	mainDiskIndex := s.QemuService.GetMainDiskIndex(srcDomCfg)
 	if vmBackingPath == "" {
+		// try to use the src vm's backing file
 		backingStore := srcDomCfg.Devices.Disks[mainDiskIndex].BackingStore
 		if backingStore != nil && backingStore.Source.File != nil {
 			vmBackingPath = backingStore.Source.File.File
