@@ -36,6 +36,9 @@ func (r *Router) App() {
 			v1.PartyFunc("/job", func(client iris.Party) {
 				client.Post("/add", r.JobCtrl.Add).Name = "创建任务"
 			})
+			v1.PartyFunc("/vnc", func(client iris.Party) {
+				client.Get("/getToken", r.VncCtrl.GetToken).Name = "获取VNC的Token"
+			})
 			v1.PartyFunc("/kvm", func(client iris.Party) {
 				client.Get("/listTempl", r.KvmCtrl.ListTempl).Name = "克隆虚机"
 				client.Post("/create", r.KvmCtrl.Create).Name = "创建虚机"
@@ -44,7 +47,6 @@ func (r *Router) App() {
 				client.Post("/{name:string}/reboot", r.KvmCtrl.Reboot).Name = "重启虚机"
 				client.Post("/{name:string}/suspend", r.KvmCtrl.Suspend).Name = "暂停虚机"
 				client.Post("/{name:string}/resume", r.KvmCtrl.Resume).Name = "恢复虚机"
-				client.Get("/getToken", r.VncCtrl.GetToken).Name = "获取VNC的Token"
 			})
 			v1.PartyFunc("/vmware", func(client iris.Party) {
 				client.Post("/create", r.VmWareCtrl.Create).Name = "创建虚机"
