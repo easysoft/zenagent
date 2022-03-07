@@ -326,7 +326,7 @@ func (s *LibvirtService) ShutdownVmByName(name string) {
 	return
 }
 
-func (s *LibvirtService) SuspendVmByName(name string) {
+func (s *LibvirtService) SuspendVmByName(name string) (err error) {
 	dom, err := s.GetVm(name)
 	if err != nil {
 		return
@@ -335,7 +335,7 @@ func (s *LibvirtService) SuspendVmByName(name string) {
 	err = dom.Suspend()
 	return
 }
-func (s *LibvirtService) ResumeVmByName(name string) {
+func (s *LibvirtService) ResumeVmByName(name string) (err error) {
 	dom, err := s.GetVm(name)
 	if err != nil {
 		return

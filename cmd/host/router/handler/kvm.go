@@ -166,7 +166,11 @@ func (c *KvmCtrl) Suspend(ctx iris.Context) {
 		return
 	}
 
-	c.LibvirtService.SuspendVmByName(name)
+	err := c.LibvirtService.SuspendVmByName(name)
+	if err != nil {
+		_, _ = ctx.JSON(_httpUtils.ApiRes(_const.ResultFail, "vm name not exist "+err.Error(), nil))
+		return
+	}
 
 	ctx.JSON(_httpUtils.ApiRes(iris.StatusOK, "success to suspend vm", name))
 	return
@@ -186,7 +190,11 @@ func (c *KvmCtrl) Resume(ctx iris.Context) {
 		return
 	}
 
-	c.LibvirtService.ResumeVmByName(name)
+	err := c.LibvirtService.ResumeVmByName(name)
+	if err != nil {
+		_, _ = ctx.JSON(_httpUtils.ApiRes(_const.ResultFail, "vm name not exist "+err.Error(), nil))
+		return
+	}
 
 	ctx.JSON(_httpUtils.ApiRes(iris.StatusOK, "success to resume vm", name))
 	return
