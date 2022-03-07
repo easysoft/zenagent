@@ -54,7 +54,7 @@ func (s *SetupService) GetToken(port string) (ret v1.VncTokenResp) {
 
 func (s *SetupService) GenWebsockifyTokens() {
 	port := 5901
-	for port <= 5910 {
+	for port <= 6000 {
 		portStr := strconv.Itoa(port)
 
 		// uuid: 192.168.1.215:5901
