@@ -18,12 +18,12 @@ func NewKvmCtrl() *KvmCtrl {
 	return &KvmCtrl{}
 }
 
-// ListTempl
+// ListTmpl
 // @summary 获取KVM虚拟机模板信息
 // @Produce json
 // @Success 200 {object} _httpUtils.Response{data=[]v1.KvmRespTempl} "code = success? 1 : 0"
 // @Router /api/v1/kvm/listTempl [get]
-func (c *KvmCtrl) ListTempl(ctx iris.Context) {
+func (c *KvmCtrl) ListTmpl(ctx iris.Context) {
 	domainCfgs, err := c.LibvirtService.ListTmpl()
 
 	if err != nil {

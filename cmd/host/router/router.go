@@ -40,7 +40,7 @@ func (r *Router) App() {
 				client.Get("/getToken", r.VncCtrl.GetToken).Name = "获取VNC的Token"
 			})
 			v1.PartyFunc("/kvm", func(client iris.Party) {
-				client.Get("/listTempl", r.KvmCtrl.ListTempl).Name = "克隆虚机"
+				client.Get("/listTmpl", r.KvmCtrl.ListTmpl).Name = "克隆虚机"
 				client.Post("/create", r.KvmCtrl.Create).Name = "创建虚机"
 				client.Post("/clone", r.KvmCtrl.Clone).Name = "克隆虚机"
 				client.Post("/{name:string}/destroy", r.KvmCtrl.Destroy).Name = "摧毁虚机"
