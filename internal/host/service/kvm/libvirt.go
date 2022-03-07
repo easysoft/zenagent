@@ -126,12 +126,12 @@ func (s *LibvirtService) CreateVm(req *v1.KvmReq, removeSameName bool) (dom *lib
 	}
 
 	// get BackingPath
-	mainDiskIndex := s.QemuService.GetMainDiskIndex(tmplDomCfg)
 	if vmBackingPath == "" {
 		// use tmpl vm's image as backing path
+		mainDiskIndex := s.QemuService.GetMainDiskIndex(tmplDomCfg)
 		vmBackingPath = tmplDomCfg.Devices.Disks[mainDiskIndex].Source.File.File
 	} else {
-		vmBackingPath = filepath.Join(agentConf.Inst.DirKvm, req.VmBacking)
+		vmBackingPath = filepath.Join(agentConf.Inst.DirKvm, vmBackingPath)
 	}
 
 	vmXml := ""
