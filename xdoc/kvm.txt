@@ -1,0 +1,4 @@
+dev/server/websockify/run  --token-plugin TokenFile --token-source ~/kvm/token/ 6080
+
+npm install -g light-server
+light-server -s ~/kvm/noVNC
