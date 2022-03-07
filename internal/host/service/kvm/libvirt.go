@@ -107,11 +107,11 @@ func (s *LibvirtService) CreateVm(req *v1.KvmReq, removeSameName bool) (dom *lib
 
 	vmMacAddress := req.VmMacAddress
 	vmUniqueName := req.VmUniqueName
-	vmBackingPath = filepath.Join(agentConf.Inst.DirKvm, req.VmBacking)
 	vmTemplateName := req.VmTemplate
 	vmCpu := req.VmCpu
 	vmMemorySize := req.VmMemorySize
 	vmDiskSize := req.VmDiskSize
+	vmBackingPath = req.VmBacking
 
 	if removeSameName {
 		s.DestroyVmByName(vmUniqueName, true)
@@ -130,6 +130,8 @@ func (s *LibvirtService) CreateVm(req *v1.KvmReq, removeSameName bool) (dom *lib
 	if vmBackingPath == "" {
 		// use tmpl vm's image as backing path
 		vmBackingPath = tmplDomCfg.Devices.Disks[mainDiskIndex].Source.File.File
+	} else {
+		vmBackingPath = filepath.Join(agentConf.Inst.DirKvm, req.VmBacking)
 	}
 
 	vmXml := ""
